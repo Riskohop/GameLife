@@ -7,21 +7,18 @@ public class CameraMovement : MonoBehaviour
     Vector3 move;
     Camera camera;
     [SerializeField] float speed;
+    [SerializeField] float speedZoom;
     private void OnValidate() {
         camera ??= GetComponent<Camera>();
     }
     private void Update() {
         move.x = Input.GetAxis("Horizontal") * speed;
         move.y = Input.GetAxis("Vertical") * speed;
+        float zoom = Input.GetAxis("Debug Vertical") * speedZoom;
         transform.Translate(move);
-        if(Input.GetKey(KeyCode.E)) {
-            camera.orthographicSize += 0.05f;
-        }
-        if(Input.GetKey(KeyCode.Q)) {
-            camera.orthographicSize -= 0.05f;
-        }
-        camera.orthographicSize = Mathf.Clamp(camera.orthographicSize, 1, 10);
-        camera.transform.position = new Vector3(Mathf.Clamp(camera.transform.position.x, -20, 20), 8,
-                                                Mathf.Clamp(camera.transform.position.z, -17, 17));
+        camera.orthographicSize += zoom;
+        camera.orthographicSize = Mathf.Clamp(camera.orthographicSize, 1, 13);
+        camera.transform.position = new Vector3(Mathf.Clamp(camera.transform.position.x, -23, 63), 8,
+                                                Mathf.Clamp(camera.transform.position.z, -14, 33));
     }
 }
