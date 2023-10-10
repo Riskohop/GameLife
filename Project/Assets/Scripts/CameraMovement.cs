@@ -13,9 +13,15 @@ public class CameraMovement : MonoBehaviour
     private void Update() {
         move.x = Input.GetAxis("Horizontal") * speed;
         move.y = Input.GetAxis("Vertical") * speed;
-        float scroll = Input.mouseScrollDelta.y;
         transform.Translate(move);
-        camera.orthographicSize += scroll;
+        if(Input.GetKey(KeyCode.E)) {
+            camera.orthographicSize += 0.05f;
+        }
+        if(Input.GetKey(KeyCode.Q)) {
+            camera.orthographicSize -= 0.05f;
+        }
         camera.orthographicSize = Mathf.Clamp(camera.orthographicSize, 1, 10);
+        camera.transform.position = new Vector3(Mathf.Clamp(camera.transform.position.x, -20, 20), 8,
+                                                Mathf.Clamp(camera.transform.position.z, -17, 17));
     }
 }
