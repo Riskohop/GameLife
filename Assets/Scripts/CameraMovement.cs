@@ -6,7 +6,7 @@ public class CameraMovement : MonoBehaviour
 {
     Vector3 move;
     Camera camera;
-    float speed;
+    [SerializeField] float speed;
     private void OnValidate() {
         camera ??= GetComponent<Camera>();
     }
