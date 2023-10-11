@@ -6,6 +6,9 @@ public class GameManager : MonoBehaviour
 {
     [SerializeField] Game game;
     [SerializeField] Display display;
+    [SerializeField] UI ui;
+    [SerializeField] CameraMovement cameraMovement;
+    bool isPencil = true;
     private void Start() {
         game.CreateGame(400, 200);
         //game.StartGame();
@@ -15,10 +18,44 @@ public class GameManager : MonoBehaviour
         int x = (int)(diference.x * 10);
         int y = (game.boardCells.GetLength(1) - (int)(diference.z * 10)) - 1;
         if(Input.GetKey(KeyCode.Mouse0) && (x < 400 && y < 200 && y > 0 && x > 0) ) {
-            game.Draw(x, y);
+            game.Draw(x, y, isPencil);
         }
-        if(Input.GetKeyDown(KeyCode.F)) {
+    }
+    public void StartPauseGame() {
+        if(game.isGaming) {
+            game.PauseGame();
+            ui.playImage.SetActive(true);
+            ui.pauseImage.SetActive(false);
+        }
+        else {
             game.StartGame();
+            ui.playImage.SetActive(false);
+            ui.pauseImage.SetActive(true);
         }
+    }
+    public void RestartGame() {
+        game.ClearGame();
+        ui.playImage.SetActive(true);
+        ui.pauseImage.SetActive(false);
+    }
+    public void ChangeSpeedGame() {
+        game.speedGame = ui.speedSlider.value;
+    }
+    public void ChangeTypeDrawing() {
+        if(isPencil) {
+            isPencil = false;
+            ui.isPencilImage.SetActive(true);
+            ui.isEraseImage.SetActive(false);
+        } else {
+            isPencil = true;
+            ui.isPencilImage.SetActive(false);
+            ui.isEraseImage.SetActive(true);
+        }
+    }
+    public void CameraZoomIn() {
+        cameraMovement.ZoomIn();
+    }
+    public void CameraZoomOut() {
+        cameraMovement.ZoomOut();
     }
 }
