@@ -8,19 +8,21 @@ public class Game : MonoBehaviour
     Texture2D textureGame;
     public Cell[,] boardCells { get; private set; }
     public float speedGame;
-    bool isGaming;
+    public bool isGaming;
     float timer;
     public bool CreateGame(int x, int y) {
         if(x > 0 && y > 0) {
             boardCells = new Cell[x, y];
+            textureGame = new Texture2D(boardCells.GetLength(0), boardCells.GetLength(1), TextureFormat.ARGB32, false);
             for(int xx = 0; xx < boardCells.GetLength(0); xx++) {
                 for(int yy = 0; yy < boardCells.GetLength(1); yy++) {
                     boardCells[xx, yy] = new Cell();
+                    textureGame.SetPixel(xx, yy, Color.white);
+                    textureGame.Apply();
                 }
             }
 
-            textureGame = new Texture2D(boardCells.GetLength(0), boardCells.GetLength(1), TextureFormat.ARGB32, false);
-            textureGame.Apply();
+           
 
             textureGame.filterMode = FilterMode.Point;
             meshRendererBorder.material.mainTexture = textureGame;
@@ -34,7 +36,7 @@ public class Game : MonoBehaviour
     public bool ClearGame() {
         if(boardCells != null) {
             isGaming = false;
-            boardCells = null;
+            CreateGame(boardCells.GetLength(0), boardCells.GetLength(1));
             return true;
         } else {
             return false;
@@ -57,11 +59,17 @@ public class Game : MonoBehaviour
             return false;
         }
     }
-    public void Draw(int x, int y) {
-        textureGame.SetPixel(x, y, Color.black);
+    public void Draw(int x, int y, bool isPencil) {
+        if(isPencil) {
+            textureGame.SetPixel(x, y, Color.black);
+            boardCells[x, y].isLive = true;
+        } else {
+            textureGame.SetPixel(x, y, Color.white);
+            boardCells[x, y].isLive = false;
+        }
         textureGame.Apply();
         meshRendererBorder.material.mainTexture = textureGame;
-        boardCells[x, y].isLive = true;
+        
     }
 
     private void Update() {
