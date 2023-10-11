@@ -11,6 +11,9 @@ public class CameraMovement : MonoBehaviour
     private void OnValidate() {
         camera ??= GetComponent<Camera>();
     }
+    private void Start() {
+        camera = GetComponent<Camera>();
+    }
     private void Update() {
         move.x = Input.GetAxis("Horizontal") * speed;
         move.y = Input.GetAxis("Vertical") * speed;
