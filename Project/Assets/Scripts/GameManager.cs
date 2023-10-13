@@ -17,9 +17,13 @@ public class GameManager : MonoBehaviour
         Vector3 diference = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         int x = (int)(diference.x * 10);
         int y = (game.boardCells.GetLength(1) - (int)(diference.z * 10)) - 1;
-        if(Input.GetKey(KeyCode.Mouse0) && (x < 400 && y < 200 && y > 0 && x > 0) ) {
-            game.Draw(x, y, isPencil);
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        if(Physics.Raycast(ray, Mathf.Infinity)) {
+            if(Input.GetKey(KeyCode.Mouse0) && (x < 400 && y < 200 && y > 0 && x > 0)) {
+                game.Draw(x, y, isPencil);
+            }
         }
+        
     }
     public void StartPauseGame() {
         if(game.isGaming) {
