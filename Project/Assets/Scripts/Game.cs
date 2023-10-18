@@ -10,6 +10,8 @@ public class Game : MonoBehaviour
     public float speedGame;
     public bool isGaming;
     float timer;
+    private int[] ruleB;
+    private int[] ruleS;
     public bool CreateGame(int x, int y) {
         if(x > 0 && y > 0) {
             boardCells = new Cell[x, y];
@@ -157,6 +159,9 @@ public class Game : MonoBehaviour
         if(boardCells[xCoordinate, yCoordinate].isLive) { neighboors++; }
 
         return neighboors;
+    }
+    public void EncodeRule(string rule) { 
+        List<>
     }
 }
 public class Cell {
