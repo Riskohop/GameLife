@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -12,4 +13,7 @@ public class UI : MonoBehaviour
     public GameObject isEraseImage;
     [Header("Slider")]
     public Slider speedSlider;
+    [Header("Rules")] 
+    public TMP_InputField ruleB;
+    public TMP_InputField ruleS;
 }

@@ -6,21 +6,22 @@ public class GameManager : MonoBehaviour
 {
     [SerializeField] Game game;
     [SerializeField] Display display;
-    [SerializeField] UI ui;
+    [SerializeField] public UI ui;
     [SerializeField] CameraMovement cameraMovement;
-    bool isPencil = true;
-    private void Start() {
+    bool _isPencil = true;
+    private void Start()
+    {
         game.CreateGame(400, 200);
         //game.StartGame();
     }
     private void Update() {
         Vector3 diference = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         int x = (int)(diference.x * 10);
-        int y = (game.boardCells.GetLength(1) - (int)(diference.z * 10)) - 1;
+        int y = (game.BoardCells.GetLength(1) - (int)(diference.z * 10)) - 1;
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         if(Physics.Raycast(ray, Mathf.Infinity)) {
             if(Input.GetKey(KeyCode.Mouse0) && (x < 400 && y < 200 && y > 0 && x > 0)) {
-                game.Draw(x, y, isPencil);
+                game.Draw(x, y, _isPencil);
             }
         }
         
@@ -46,12 +47,12 @@ public class GameManager : MonoBehaviour
         game.speedGame = ui.speedSlider.value;
     }
     public void ChangeTypeDrawing() {
-        if(isPencil) {
-            isPencil = false;
+        if(_isPencil) {
+            _isPencil = false;
             ui.isPencilImage.SetActive(true);
             ui.isEraseImage.SetActive(false);
         } else {
-            isPencil = true;
+            _isPencil = true;
             ui.isPencilImage.SetActive(false);
             ui.isEraseImage.SetActive(true);
         }
