@@ -1,11 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class GameManager : MonoBehaviour
 {
     [SerializeField] Game game;
-    [SerializeField] Display _display;
     [SerializeField] public UI ui;
     [SerializeField] CameraMovement cameraMovement;
     [SerializeField] Brush pixelBrush;
@@ -23,22 +23,22 @@ public class GameManager : MonoBehaviour
     }
 
     private void Update() {
-        if (_coordinateX == null)
+        if (_coordinateX.Count == 0 && _coordinateX == null)
         {
-            _coordinateX.Enqueue(60);
+            _coordinateX.Enqueue(1);
         }
-        if (_coordinateY == null)
+        if (_coordinateY.Count == 0 && _coordinateY == null)
         {
-            _coordinateY.Enqueue(60);
+            _coordinateY.Enqueue(1);
         }
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        RaycastHit hit;
         Cursor.lockState = CursorLockMode.Confined;
         Vector3 diference = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         var x = (int)(diference.z * 10);
         var y = (game.BoardCells.GetLength(1) - (int)(diference.x * 10)) - 1;
-        
-        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-        RaycastHit hit;
-        if (Physics.Raycast(ray, out hit, Mathf.Infinity))
+        Debug.Log($"{x},{y}");
+        if (!EventSystem.current.IsPointerOverGameObject() && Physics.Raycast(ray, out hit, Mathf.Infinity))
         {
             if (hit.collider.CompareTag("Board"))
             {
@@ -66,6 +66,12 @@ public class GameManager : MonoBehaviour
                         game.Draw(_coordinateX.Peek(), _coordinateY.Peek(), _isPencil, pixelBrush);
                     }
                     game.DrawCursor(_coordinateX.Peek(),_coordinateY.Peek(), pixelBrush);
+                }
+                else
+                {
+                    Cursor.visible = true;
+                    game.EaseCursor(_coordinateX.Peek(),_coordinateY.Peek(), pixelBrush);
+                
                 }
                 
             }

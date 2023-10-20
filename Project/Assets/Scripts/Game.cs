@@ -40,7 +40,24 @@ public class Game : MonoBehaviour
     public bool ClearGame() {
         if(BoardCells != null) {
             isGaming = false;
-            CreateGame(BoardCells.GetLength(0), BoardCells.GetLength(1));
+            _ruleB = new int[] { 9 };
+            _ruleS = new int[] { 9 };
+            for(int x = 0; x < BoardCells.GetLength(0); x++) {
+                for(int y = 0; y < BoardCells.GetLength(1); y++)
+                {
+                    BoardCells[x,y].NeighborsCells = CalculateNeighborsAtCell(x,y);
+                }
+            } 
+            for(int x = 0; x < BoardCells.GetLength(0); x++) {
+                for(int y = 0; y < BoardCells.GetLength(1); y++)
+                {
+                    MakeTurn(x,y);
+                    Color color = BoardCells[x,y].IsLive ? Color.black : Color.white;
+                    _textureGame.SetPixel(x, y, color);
+                }
+            } 
+            meshRendererBorder.material.mainTexture = _textureGame;
+            _textureGame.Apply();
             return true;
         } else {
             return false;
@@ -244,7 +261,6 @@ public class Game : MonoBehaviour
         for (var i = 0; i < ruleArray.Length; i++)
         {
             ruleArray[i] = char.IsDigit(ruleChars[i]) ? (int)char.GetNumericValue(ruleChars[i]) : 0;
-            Debug.Log(ruleArray[i]);
         }
         return ruleArray;
     }
