@@ -68,19 +68,71 @@ public class Game : MonoBehaviour
     }
 
     #endregion
-    public void Draw(int x, int y, bool isPencil) {
+    public void Draw(int x, int y, bool isPencil, Brush brush) {
+        var cellsBrush = brush.brushMatrix.GetCells();
         if(isPencil) {
-            _textureGame.SetPixel(x, y, Color.black);
-            BoardCells[x, y].IsLive = true;
+            for (int xCell = 0; xCell < cellsBrush.GetLength(0); xCell++)
+            {
+                for (int yCell = 0; yCell < cellsBrush.GetLength(1); yCell++)
+                {
+                    if (cellsBrush[xCell, yCell])
+                    {
+                        _textureGame.SetPixel(x + xCell, y + yCell, Color.black);
+                        BoardCells[x + xCell, y + yCell].IsLive = true;
+                    }
+                }
+            }
         } else {
-            _textureGame.SetPixel(x, y, Color.white);
-            BoardCells[x, y].IsLive = false;
+            for (int xCell = 0; xCell < cellsBrush.GetLength(0); xCell++)
+            {
+                for (int yCell = 0; yCell < cellsBrush.GetLength(1); yCell++)
+                {
+                    if (cellsBrush[xCell, yCell])
+                    {
+                        _textureGame.SetPixel(x + xCell, y + yCell, Color.white);
+                        BoardCells[x + xCell, y + yCell].IsLive = false;
+                    }
+                }
+            }
+            
         }
         _textureGame.Apply();
         meshRendererBorder.material.mainTexture = _textureGame;
         
     }
 
+    public void DrawCursor(int x, int y, Brush brush)
+    {
+        var cellsBrush = brush.brushMatrix.GetCells();
+        for (int xCell = 0 ; xCell < cellsBrush.GetLength(0); xCell++)
+        {
+            for (int yCell = 0 ; yCell < cellsBrush.GetLength(1); yCell++)
+            {
+                if (cellsBrush[xCell, yCell])
+                {
+                    _textureGame.SetPixel(x + xCell, y + yCell, Color.grey);
+                }
+            }
+        }
+        
+
+        _textureGame.Apply();
+        meshRendererBorder.material.mainTexture = _textureGame;
+    }
+    public void EaseCursor(int x, int y, Brush brush)
+    {
+        var cellsBrush = brush.brushMatrix.GetCells();
+        for (int xCell = 0; xCell < cellsBrush.GetLength(0); xCell++)
+        {
+            for (int yCell = 0; yCell < cellsBrush.GetLength(1); yCell++)
+            {
+                _textureGame.SetPixel(x + xCell, y + yCell, BoardCells[x + xCell, y + yCell].IsLive ? Color.black : Color.white);
+            }
+        }
+      
+        _textureGame.Apply();
+        meshRendererBorder.material.mainTexture = _textureGame;
+    }
     private void Update() {
         if(isGaming && speedGame < _timer) {
             //CalculateNeighboors
